@@ -1,20 +1,21 @@
 # ==============================================================================
-# CODE BLOCK B
+# CODE BLOCK H
 # ==============================================================================
 # What does this code do? Give it a name: _______________
 
-cat(paste(rep("=", 70), collapse=""), "\n")
-cat("METHOD 3: FILL WITH MEDIAN\n")
-cat(paste(rep("=", 70), collapse=""), "\n\n")
+data <- readRDS("current_dataset.rds")
+dataset_info <- readRDS("dataset_info.rds")
 
-data_method3 <- data %>%
-  mutate(across(all_of(numeric_cols), ~ifelse(is.na(.), median(., na.rm = TRUE), .)))
+numeric_cols <- names(data)[sapply(data, is.numeric)]
 
-cat("Result:\n")
-cat("  • All rows kept:", nrow(data_method3), "\n")
-cat("  • Missing after:", sum(is.na(data_method3)), "\n\n")
+data_method1 <- data %>% drop_na()
 
-saveRDS(data_method3, "current_dataset_CLEANED.rds")
-write_csv(data_method3, "data_CLEANED.csv")
+cat("METHOD 1: Remove rows\n")
+cat("  • Rows kept:", nrow(data_method1), "\n")
+cat("  • Data loss:", round((1 - nrow(data_method1)/nrow(data)) * 100, 1), "%\n\n")
 
-cat("✓ Saved: data_CLEANED.csv\n\n")
+data_method2 <- data %>%
+  mutate(across(all_of(numeric_cols), ~ifelse(is.na(.), mean(., na.rm = TRUE), .)))
+
+cat("METHOD 2: Fill with mean\n")
+cat("  • Missing after:", sum(is.na(data_method2)), "\n\n")
