@@ -129,6 +129,33 @@ data %>%
 
 Contact: your.email@example.com
 ')
+# ==============================================================================
+# RENDER PRESENTATION
+# ==============================================================================
+
+cat("📊 Rendering presentation...\n\n")
+
+if(require(rmarkdown, quietly = TRUE)) {
+  tryCatch({
+    rmarkdown::render("presentation.Rmd")
+    cat("✓ Presentation created: presentation.html\n\n")
+    cat("📂 Open presentation.html in your browser!\n\n")
+  }, error = function(e) {
+    cat("⚠️  Could not auto-render. Open presentation.Rmd in RStudio and click 'Knit'\n\n")
+  })
+} else {
+  cat("⚠️  Install rmarkdown package to auto-generate\n")
+  cat("    Run: install.packages('rmarkdown')\n\n")
+  cat("    Or open presentation.Rmd in RStudio and click 'Knit'\n\n")
+}
+
+cat(paste(rep("=", 70), collapse=""), "\n")
+cat("🎉 WORKSHOP COMPLETE!\n")
+cat(paste(rep("=", 70), collapse=""), "\n\n")
+
+cat("Generated files:\n")
+cat("  • presentation.Rmd\n")
+cat("  • presentation.html\n\n")
 
 # Write the R Markdown file
 writeLines(rmd_content, "presentation.Rmd")
